@@ -33,6 +33,7 @@ export default function UserForm({ _id, setUsers, setError, onClose }: ModalCont
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
+        setLoading(true)
         try {
             const url = _id ? `/api/users/${_id}` : '/api/users'
             const submittedData = { name, phoneNumber, email, hobbies }
@@ -65,9 +66,11 @@ export default function UserForm({ _id, setUsers, setError, onClose }: ModalCont
         } catch (error) {
             setError(error as string)
         }
+        setLoading(false)
     }
 
     async function deleteUser() {
+        setLoading(true)
         try {
             const response = await fetch(`/api/users/${_id}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' } })
             if (!response.ok) {
@@ -78,6 +81,7 @@ export default function UserForm({ _id, setUsers, setError, onClose }: ModalCont
         } catch (error) {
             setError(error as string)
         }
+        setLoading(false)
     }
 
     if (loading) {
