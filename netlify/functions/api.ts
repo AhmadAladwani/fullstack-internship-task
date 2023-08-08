@@ -2,8 +2,8 @@ import { config } from "dotenv"
 config()
 import "express-async-errors"
 
-import express, { Router } from 'express'
-import serverless from 'serverless-http'
+import express from "express"
+import serverless from "serverless-http"
 
 export const api = express()
 
@@ -28,7 +28,6 @@ api.use(mongoSanitize())
 api.use(express.json())
 
 api.use('/api', router)
-api.get('/api/test', (_, res) => res.json({ greeting: 'Hello' }))
 
 api.use(errorHandlerMiddleware)
 
@@ -43,7 +42,7 @@ async function start() {
             })
             api.listen(process.env['PORT'])
         }
-    } catch (error) { }
+    } catch (error) {}
 }
 
 start()
