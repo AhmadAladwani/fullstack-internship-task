@@ -17,15 +17,20 @@ export default function UserForm({ _id, setUsers, setError, onClose }: ModalCont
     useEffect(() => {
         if (_id) {
             async function getSingleUser() {
-                const response = await fetch(`/api/users/${_id}`)
-                const data: { user: User } = await response.json()
-                const { user } = data
-                const { name, phoneNumber, email, hobbies } = user
-                setName(name)
-                setPhoneNumber(phoneNumber)
-                setEmail(email)
-                setHobbies(hobbies)
-                setLoading(false)
+                try {
+                    const response = await fetch(`/api/users/${_id}`)
+                    const data: { user: User } = await response.json()
+                    const { user } = data
+                    const { name, phoneNumber, email, hobbies } = user
+                    setName(name)
+                    setPhoneNumber(phoneNumber)
+                    setEmail(email)
+                    setHobbies(hobbies)
+                } catch (error) {
+                    setError(error as string)
+                } finally {
+                    setLoading(false)
+                }
             }
             getSingleUser()
         }
@@ -33,6 +38,7 @@ export default function UserForm({ _id, setUsers, setError, onClose }: ModalCont
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
+        setLoading(true)
         try {
             const url = _id ? `/api/users/${_id}` : '/api/users'
             const submittedData = { name, phoneNumber, email, hobbies }
@@ -64,10 +70,13 @@ export default function UserForm({ _id, setUsers, setError, onClose }: ModalCont
             onClose()
         } catch (error) {
             setError(error as string)
+        } finally {
+            setLoading(false)
         }
     }
 
     async function deleteUser() {
+        setLoading(true)
         try {
             const response = await fetch(`/api/users/${_id}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' } })
             if (!response.ok) {
@@ -77,6 +86,8 @@ export default function UserForm({ _id, setUsers, setError, onClose }: ModalCont
             onClose()
         } catch (error) {
             setError(error as string)
+        } finally {
+            setLoading(false)
         }
     }
 

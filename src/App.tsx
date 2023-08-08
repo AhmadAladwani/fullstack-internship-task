@@ -30,10 +30,11 @@ export default function App() {
                 const { users } = data
                 if (!ignore) {
                     setUsers(users)
-                    setLoading(false)
                 }
             } catch (error) {
                 setError(error as string)
+            } finally {
+                setLoading(false)
             }
 
         }
@@ -88,8 +89,11 @@ export default function App() {
             const selectedUsersString = selectedUsers.map(selectedUser => `\nID: ${selectedUser._id}, Name: ${selectedUser.name}, Phone number: ${selectedUser.phoneNumber}, Email: ${selectedUser.email}, Hobbies: ${selectedUser.hobbies}`)
             await emailjs.send(import.meta.env.VITE_SERVICE_ID, import.meta.env.VITE_TEMPLATE_ID, { from_name: 'Ahmad', to_name: 'Team RedPositive', message: `Here are the selected users: ${selectedUsersString}` }, import.meta.env.VITE_PUBLIC_KEY)
             setSentEmail(true)
-        } catch (error) { }
-        setLoading(false)
+        } catch (error) {
+            setError(error as string)
+        } finally {
+            setLoading(false)
+        }
     }
 
     if (loading) {
