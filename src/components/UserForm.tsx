@@ -73,6 +73,7 @@ export default function UserForm({ _id, setUsers, setError, onClose }: ModalCont
         } finally {
             setLoading(false)
         }
+        setLoading(false)
     }
 
     async function deleteUser() {
@@ -89,6 +90,7 @@ export default function UserForm({ _id, setUsers, setError, onClose }: ModalCont
         } finally {
             setLoading(false)
         }
+        setLoading(false)
     }
 
     if (loading) {
